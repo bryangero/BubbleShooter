@@ -3,17 +3,17 @@ using System.Collections;
 
 public class Shooter : MonoBehaviour 
 {
-	public float rotationSpeed;
-	public GameObject bubbleGameObject;
-	public GameObject direction;
+	[SerializeField] private float rotationSpeed;
+	[SerializeField] private GameObject bubbleGameObject;
+	[SerializeField] private GameObject direction;
 
 	private void Update() 
 	{
-		if(Input.GetKey (KeyCode.LeftArrow)) 
+		if(Input.GetKey(KeyCode.LeftArrow)) 
 		{
 			transform.Rotate(0f, 0f, rotationSpeed);
 		}
-		if(Input.GetKey (KeyCode.RightArrow)) 
+		if(Input.GetKey(KeyCode.RightArrow)) 
 		{
 			transform.Rotate(0f, 0f, -rotationSpeed);
 		}
