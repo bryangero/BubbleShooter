@@ -3,13 +3,13 @@ using System.Collections;
 
 public class Bubble : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	[SerializeField] private float speed;
+	public Vector3 direction;
+
+	private void Update () 
+	{
+		transform.Translate(direction * (Time.deltaTime*speed));
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+
 }
