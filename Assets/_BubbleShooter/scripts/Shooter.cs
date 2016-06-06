@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Shooter : MonoBehaviour {
-
+public class Shooter : MonoBehaviour 
+{
 	public float rotationSpeed;
 	public GameObject bubbleGameObject;
 	public GameObject direction;
 
-	private void Update() {
+	private void Update() 
+	{
 		if(Input.GetKey (KeyCode.LeftArrow)) 
 		{
 			transform.Rotate(0f, 0f, rotationSpeed);
@@ -22,6 +23,5 @@ public class Shooter : MonoBehaviour {
 			bubble.direction = direction.transform.position; 
 		}
 	}
-
 
 }

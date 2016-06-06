@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Border : MonoBehaviour {
+public class Border : MonoBehaviour 
+{
 
 	[SerializeField] private Vector3 newDirection;
 
