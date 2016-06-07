@@ -46,17 +46,19 @@ public class Bubble : MonoBehaviour
 			Destroy(gameObject);
 	}
 
-	private void OnTriggerEnter2D(Collider2D other) 
+	private void OnTriggerEnter2D(Collider2D otherCollider) 
 	{
-		Bubble otherBubble = other.GetComponent<Bubble>() as Bubble;
+		Bubble otherBubble = otherCollider.GetComponent<Bubble>() as Bubble;
 		if (isMoving == true) 
 		{
 			if (otherBubble != null) 
 			{
-				otherBubble.Pop (bubbleColor);
 				direction = Vector3.zero;
-				isMoving = false;
+				otherBubble.Pop(bubbleColor);
+				if (otherBubble.bubbleColor == bubbleColor)
+					Pop (bubbleColor);
 			} 
+			isMoving = false;
 		}
 	}
 		
