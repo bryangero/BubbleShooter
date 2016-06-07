@@ -43,9 +43,7 @@ public class Bubble : MonoBehaviour
 	public void Pop(Color bubbleColor)
 	{
 		if (this.bubbleColor == bubbleColor) 
-		{
 			Destroy(gameObject);
-		}
 	}
 
 	private void OnTriggerEnter2D(Collider2D other) 
@@ -53,13 +51,13 @@ public class Bubble : MonoBehaviour
 		Bubble otherBubble = other.GetComponent<Bubble>() as Bubble;
 		if (isMoving == true) 
 		{
-			if (otherBubble != null) {
+			if (otherBubble != null) 
+			{
 				otherBubble.Pop (bubbleColor);
 				direction = Vector3.zero;
 				isMoving = false;
 			} 
 		}
 	}
-
-
+		
 }
