@@ -6,21 +6,36 @@ public class Shooter : MonoBehaviour
 	[SerializeField] private float rotationSpeed;
 	[SerializeField] private GameObject bubbleGameObject;
 	[SerializeField] private GameObject direction;
+	private Bubble bubble;
+	private bool isBubbleShot;
+
+	private void Start() 
+	{
+		ReloadBubble();	
+	}
+
+	public void ReloadBubble()
+	{
+		bubble = Instantiate(bubbleGameObject).GetComponent<Bubble>() as Bubble;
+	}
 
 	private void Update() 
 	{
-		if(Input.GetKey(KeyCode.LeftArrow)) 
+		float mouseAxisX = Input.GetAxis("Mouse X");
+		transform.Rotate(0f, 0f, -mouseAxisX * rotationSpeed);
+		if(Input.GetMouseButtonUp(0))
 		{
-			transform.Rotate(0f, 0f, rotationSpeed);
+			if (bubble != null) 
+			{
+				bubble.direction = direction.transform.position;
+				bubble.isMoving = true;
+				isBubbleShot = true;
+			} 
 		}
-		if(Input.GetKey(KeyCode.RightArrow)) 
+		if (bubble.isMoving == false && isBubbleShot == true) 
 		{
-			transform.Rotate(0f, 0f, -rotationSpeed);
-		}
-		if(Input.GetKeyUp(KeyCode.Space))
-		{
-			Bubble bubble = Instantiate(bubbleGameObject).GetComponent<Bubble>() as Bubble;
-			bubble.direction = direction.transform.position; 
+			isBubbleShot = false;
+			ReloadBubble();
 		}
 	}
 
