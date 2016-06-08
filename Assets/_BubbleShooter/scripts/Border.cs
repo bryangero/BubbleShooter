@@ -12,6 +12,5 @@ public class Border : MonoBehaviour
 		bubble.direction = new Vector3(bubble.direction.x * newDirection.x, 
 									   bubble.direction.y * newDirection.y);
 	}
-
-
+		
 }

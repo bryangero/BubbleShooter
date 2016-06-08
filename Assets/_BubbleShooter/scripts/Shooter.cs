@@ -3,10 +3,7 @@ using System.Collections;
 
 public class Shooter : MonoBehaviour 
 {
-
-	public delegate void ShootBubbleDG();
-	public event ShootBubbleDG ShootBubbleEvent;
-
+	private int numberOfShots;
 	private GameManager gameManager;
 	[SerializeField] private float rotationSpeed;
 	[SerializeField] private GameObject bubbleGameObject;
@@ -24,6 +21,8 @@ public class Shooter : MonoBehaviour
 	{
 		isBubbleShot = false;
 		bubble = Instantiate(bubbleGameObject).GetComponent<Bubble>() as Bubble;
+		bubble.name = numberOfShots.ToString();
+		numberOfShots++;
 	}
 		
 	private void Update() 
