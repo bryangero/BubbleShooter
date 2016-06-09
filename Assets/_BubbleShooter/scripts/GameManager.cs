@@ -4,10 +4,19 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour 
 {
+	public Bubble[][] bubbles;
+
 	public const int MAX_ROW = 11;
 	public const int MAX_COLUMN = 13;
 
-
+	private void Awake() 
+	{
+		bubbles = new Bubble[MAX_ROW][];
+		for (int i = 0; i < bubbles.Length; i++) 
+		{
+			bubbles[i] = new Bubble[MAX_COLUMN];
+		}
+	}
 
 	public delegate void PopBubbleDG(Color color);
 	public event PopBubbleDG PopBubbleEvent;

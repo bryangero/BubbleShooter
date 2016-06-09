@@ -25,11 +25,13 @@ public class HexGrid : MonoBehaviour
 			{
 				Vector2 hexpos = HexOffset(i, j);
 				Vector3 pos = new Vector3(hexpos.x, hexpos.y, 0);
-				Transform t = Instantiate(spawnThis, pos, Quaternion.identity) as Transform;
-				t.transform.parent = transform;
-				t.name = i +"-"+ j;
-				t.GetComponent<Bubble>().row = i;
-				t.GetComponent<Bubble>().column = j;
+				Transform spawn = Instantiate(spawnThis, pos, Quaternion.identity) as Transform;
+				spawn.transform.parent = transform;
+				spawn.name = i +"-"+ j;
+				Bubble spawnBubble = spawn.GetComponent<Bubble>();
+				spawnBubble.row = i;
+				spawnBubble.column = j;
+				gameManager.bubbles [i] [j] = spawnBubble;
 			}
 		}
 	}

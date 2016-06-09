@@ -74,7 +74,6 @@ public class Bubble : MonoBehaviour
 			Vector2.up,
 			0f,
 			bubbleLayerMask);
-		
 		Debug.Log(name + " " + hits.Length);
 //		for (int i = 0; i < hits.Length; i++) 
 //		{
@@ -83,12 +82,6 @@ public class Bubble : MonoBehaviour
 //		}
 	}
 
-	public void Test(Collider2D otherCollider) 
-	{
-			if(BubbleLandedEvent != null) 
-				BubbleLandedEvent();
-	}
-		
 	private void OnTriggerEnter2D(Collider2D otherCollider) 
 	{
 		Border border = otherCollider.GetComponent<Border>() as Border;
@@ -105,7 +98,6 @@ public class Bubble : MonoBehaviour
 				otherBubble = otherClipper.bubble;
 			if (otherBubble != null) 
 			{
-				Debug.Log (otherCollider.name + " " +  otherBubble.row+ " " +otherBubble.column );
 				if (otherCollider.name == "BottomSnapLeft") 
 				{
 					column = otherBubble.column + 1;
@@ -115,23 +107,40 @@ public class Bubble : MonoBehaviour
 				{
 					column = otherBubble.column + 1;
 					row = otherBubble.row;
-					if (column % 2 == 0)
-						row += 1;
+					if (column % 2 == 0) 
+					{
+						if (row + 1 < GameManager.MAX_ROW) 
+							row++;
+					}
 				}
 				else if (otherCollider.name == "Left") 
 				{
 					column = otherBubble.column;
-					row = otherBubble.row - 1;
+					row = otherBubble.row;
+					if (row - 1 >= 0)
+						row--;
+					else
+						column++;
+					if (gameManager.bubbles [row] [column] != null) 
+					{
+						column++;
+					}
+						
 				}
 				else if (otherCollider.name == "Right") 
 				{
+					row = otherBubble.row;
 					column = otherBubble.column;
-					row = otherBubble.row + 1;
+					if (row + 1 < GameManager.MAX_ROW)
+						row++;
+					else
+						column++;
+						
 				}
-				Debug.Log (otherCollider.name + " " + row + " " + column);
+				gameManager.bubbles [row] [column] = this;
+
 				Vector2 hexpos = hexGrid.HexOffset(row ,column);
 				Vector3 pos = new Vector3(hexpos.x, hexpos.y, 0);
-				Debug.Log (pos);
 				transform.position = pos;
 				direction = Vector3.zero;
 				myCollider.enabled = false;
