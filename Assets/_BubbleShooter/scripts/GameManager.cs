@@ -4,10 +4,16 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour 
 {
+
+	public delegate void GameOverDG();
+	public event GameOverDG GameOverEvent;
+
 	public Bubble[][] bubbles;
 
 	public const int MAX_ROW = 11;
 	public const int MAX_COLUMN = 13;
+
+
 
 	private void Awake() 
 	{
@@ -38,5 +44,9 @@ public class GameManager : MonoBehaviour
 		if(PopBubbleEvent != null)
 			PopBubbleEvent(color);
 	}
+
+	public void OnGameOver() {
 		
+	}
+
 }

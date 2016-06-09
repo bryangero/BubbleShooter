@@ -102,6 +102,12 @@ public class Bubble : MonoBehaviour
 				{
 					column = otherBubble.column + 1;
 					row = otherBubble.row;
+					if (column % 2 != 0) 
+					{
+						if (row - 1 >= 0) 
+							row--;
+					}
+
 				}
 				else if (otherCollider.name == "BottomSnapRight") 
 				{
