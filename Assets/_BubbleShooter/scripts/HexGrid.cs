@@ -3,6 +3,7 @@ using System.Collections;
 
 public class HexGrid : MonoBehaviour 
 {
+	ArrayList bubbles = new ArrayList();
 	private GameManager gameManager;
 	public Transform spawnThis;   
 	public int x = 5;
@@ -19,26 +20,32 @@ public class HexGrid : MonoBehaviour
 		offsetY = unitLength * 1.5f;
 		for( int i = 0; i < x; i++ ) 
 		{
+			
 			for( int j = 0; j < y; j++ ) 
 			{
-				Vector2 hexpos = HexOffset((int)transform.position.x + i, (int)transform.position.y + j);
+				Vector2 hexpos = HexOffset(i, j);
 				Vector3 pos = new Vector3(hexpos.x, hexpos.y, 0);
-				Instantiate(spawnThis, pos, Quaternion.identity);
+				Transform t = Instantiate(spawnThis, pos, Quaternion.identity) as Transform;
+				t.transform.parent = transform;
+				t.name = i +"-"+ j;
+				t.GetComponent<Bubble>().row = i;
+				t.GetComponent<Bubble>().column = j;
 			}
 		}
 	}
 
-	private Vector2 HexOffset(int x, int y) 
+	public Vector2 HexOffset(int x, int y) 
 	{
 		Vector2 position = Vector2.zero;
-		if(y % 2 == 0) {
-			position.x = x * offsetX;
-			position.y = y * offsetY;
+		if(y % 2 == 0) 
+		{
+			position.x = transform.position.x + ( x * offsetX);
+			position.y = transform.position.y + ( y * -offsetY);
 		}
 		else 
 		{
-			position.x = (x + 0.5f) * offsetX;
-			position.y = y * offsetY;
+			position.x = transform.position.x + ( (x + 0.5f) * offsetX);
+			position.y = transform.position.y + (y * -offsetY);
 		}
 		return position;
 	}

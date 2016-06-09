@@ -6,9 +6,11 @@ public class Bubble : MonoBehaviour
 	
 	public delegate void BubbleLandedDG();
 	public event BubbleLandedDG BubbleLandedEvent;
-
+	public HexGrid hexGrid;
 	[SerializeField] private GameManager gameManager;
 	[SerializeField] private float speed;
+	public GameObject mySnapColliders;
+	public Collider2D myCollider;
 	public Color bubbleColor;
 	public bool isMoving;
 	public Vector3 direction;
@@ -19,22 +21,33 @@ public class Bubble : MonoBehaviour
 	public Transform Right;
 	public Transform Left;
 	public RaycastHit2D[] hits;
+	public int row;
+	public int column;
 
 	private void Start() 
 	{
+		hexGrid = GameObject.FindObjectOfType(typeof(HexGrid)) as HexGrid;
 		gameManager = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
 		Color[] colors = new Color[5] { Color.red, Color.blue, Color.yellow, 
 										Color.green, Color.magenta };
 //		Color[] colors = new Color[1] { Color.red };
 		bubbleColor = colors[Random.Range(0, colors.Length)];
 		gameObject.GetComponent<SpriteRenderer>().color = bubbleColor;
+		direction = Vector3.zero;
+		myCollider.enabled = false;
+		mySnapColliders.SetActive (true);
+
 	}
 
 	private void Update() 
 	{
 //		UpdateHits();
 		if (direction != Vector3.zero) 
+		{
+			mySnapColliders.SetActive (false);
 			isMoving = true;
+			myCollider.enabled = true;
+		}
 		transform.Translate(direction * (Time.deltaTime*speed));
 	}
 
@@ -75,12 +88,9 @@ public class Bubble : MonoBehaviour
 			if(BubbleLandedEvent != null) 
 				BubbleLandedEvent();
 	}
-
-
-
+		
 	private void OnTriggerEnter2D(Collider2D otherCollider) 
 	{
-		Bubble otherBubble = otherCollider.GetComponent<Bubble>() as Bubble;
 		Border border = otherCollider.GetComponent<Border>() as Border;
 		if (isMoving == true) 
 		{
@@ -89,9 +99,45 @@ public class Bubble : MonoBehaviour
 				if (border.name != "TopBorder")
 					return;
 			}
+			Clipper otherClipper = otherCollider.GetComponent<Clipper>() as Clipper;
+			Bubble otherBubble = null; 
+			if (otherClipper != null) 
+				otherBubble = otherClipper.bubble;
 			if (otherBubble != null) 
 			{
+				Debug.Log (otherCollider.name + " " +  otherBubble.row+ " " +otherBubble.column );
+				if (otherCollider.name == "BottomSnapLeft") 
+				{
+					column = otherBubble.column + 1;
+					row = otherBubble.row;
+				}
+				else if (otherCollider.name == "BottomSnapRight") 
+				{
+					column = otherBubble.column + 1;
+					row = otherBubble.row;
+					if (column % 2 == 0)
+						row += 1;
+				}
+				else if (otherCollider.name == "Left") 
+				{
+					column = otherBubble.column;
+					row = otherBubble.row - 1;
+				}
+				else if (otherCollider.name == "Right") 
+				{
+					column = otherBubble.column;
+					row = otherBubble.row + 1;
+				}
+				Debug.Log (otherCollider.name + " " + row + " " + column);
+				Vector2 hexpos = hexGrid.HexOffset(row ,column);
+				Vector3 pos = new Vector3(hexpos.x, hexpos.y, 0);
+				Debug.Log (pos);
+				transform.position = pos;
 				direction = Vector3.zero;
+				myCollider.enabled = false;
+				mySnapColliders.SetActive(true);
+				name = row + "-" + column;
+				transform.parent = gameManager.transform;
 				otherBubble.ValidateColorForPop(bubbleColor);
 			} 
 			isMoving = false;
@@ -99,6 +145,5 @@ public class Bubble : MonoBehaviour
 				BubbleLandedEvent();
 		}
 	}
-
 		
 }
