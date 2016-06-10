@@ -3,7 +3,6 @@ using System.Collections;
 
 public class HexGrid : MonoBehaviour 
 {
-	ArrayList bubbles = new ArrayList();
 	private GameManager gameManager;
 	public Transform spawnThis;   
 	public int x = 5;
@@ -20,7 +19,6 @@ public class HexGrid : MonoBehaviour
 		offsetY = unitLength * 1.5f;
 		for( int i = 0; i < x; i++ ) 
 		{
-			
 			for( int j = 0; j < y; j++ ) 
 			{
 				Vector2 hexpos = HexOffset(i, j);

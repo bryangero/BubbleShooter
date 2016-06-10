@@ -4,6 +4,8 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour 
 {
+	public static int bubbleCount;
+	public static bool ischeckingbubbles;
 
 	public delegate void GameOverDG();
 	public event GameOverDG GameOverEvent;
@@ -13,15 +15,11 @@ public class GameManager : MonoBehaviour
 	public const int MAX_ROW = 11;
 	public const int MAX_COLUMN = 13;
 
-
-
 	private void Awake() 
 	{
 		bubbles = new Bubble[MAX_ROW][];
 		for (int i = 0; i < bubbles.Length; i++) 
-		{
 			bubbles[i] = new Bubble[MAX_COLUMN];
-		}
 	}
 
 	public delegate void PopBubbleDG(Color color);
@@ -43,10 +41,10 @@ public class GameManager : MonoBehaviour
 	{
 		if(PopBubbleEvent != null)
 			PopBubbleEvent(color);
+		PopBubbleEvent = null;
+		bubbleCount = 0;
 	}
 
-	public void OnGameOver() {
+
 		
-	}
-
 }

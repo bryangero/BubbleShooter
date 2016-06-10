@@ -14,10 +14,10 @@ public class Shooter : MonoBehaviour
 	private void Start() 
 	{
 		gameManager = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
-		ReloadBubble();	
+		ReloadBubble(Color.white);	
 	}
 
-	public void ReloadBubble()
+	public void ReloadBubble (Color color)
 	{
 		isBubbleShot = false;
 		bubble = Instantiate(bubbleGameObject).GetComponent<Bubble>() as Bubble;
