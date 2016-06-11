@@ -4,8 +4,7 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour 
 {
-	public static int bubbleCount;
-	public static bool ischeckingbubbles;
+	public int score = 0;
 
 	public delegate void GameOverDG();
 	public event GameOverDG GameOverEvent;
@@ -22,7 +21,7 @@ public class GameManager : MonoBehaviour
 			bubbles[i] = new Bubble[MAX_COLUMN];
 	}
 
-	public delegate void PopBubbleDG();
+	public delegate void PopBubbleDG(int score);
 	public event PopBubbleDG PopBubbleEvent;
 
 	public delegate void CancelPopBubbleDG();
@@ -46,13 +45,16 @@ public class GameManager : MonoBehaviour
 	public void CallPopBubbleEvent() 
 	{
 		if (PopBubbleEvent != null && PopBubbleEvent.GetInvocationList ().Length >= 3) {
-			PopBubbleEvent();
+			int scorePerBubble = 5 * PopBubbleEvent.GetInvocationList().Length;
+			PopBubbleEvent(scorePerBubble);
+			int totalScore = scorePerBubble * PopBubbleEvent.GetInvocationList().Length;
+			score += totalScore;
+			Debug.Log(score);
 		} else if (CancelPopBubbleEvent != null) {
 			CancelPopBubbleEvent();
 		}
 		PopBubbleEvent = null;
 		CancelPopBubbleEvent = null;
-		bubbleCount = 0;
 	}
 
 		

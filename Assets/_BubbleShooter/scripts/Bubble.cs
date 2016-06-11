@@ -8,6 +8,7 @@ public class Bubble : MonoBehaviour
 	public event BubbleLandedDG BubbleLandedEvent;
 	public HexGrid hexGrid;
 	[SerializeField] private GameManager gameManager;
+	[SerializeField] private Score score;
 	[SerializeField] private float speed;
 	public GameObject mySnapColliders;
 	public Collider2D myCollider;
@@ -23,7 +24,6 @@ public class Bubble : MonoBehaviour
 	public RaycastHit2D[] hits;
 	public int row;
 	public int column;
-
 	public bool isChecked;
 
 	private void Start() 
@@ -51,10 +51,12 @@ public class Bubble : MonoBehaviour
 		transform.Translate(direction * (Time.deltaTime*speed));
 	}
 
-	public void Pop()
+	public void Pop(int score)
 	{
+		this.score.Animate(score);
 		gameManager.bubbles[row][column] = null;
-		Destroy(gameObject);
+		gameObject.GetComponent<SpriteRenderer>().enabled = false;
+//		Destroy(gameObject);
 	}
 
 	public void CancelPop() 
