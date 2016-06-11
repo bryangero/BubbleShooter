@@ -51,7 +51,7 @@ public class Bubble : MonoBehaviour
 		transform.Translate(direction * (Time.deltaTime*speed));
 	}
 
-	public void Pop(Color bubbleColor)
+	public void Pop()
 	{
 		gameManager.bubbles[row][column] = null;
 		Destroy(gameObject);
@@ -62,9 +62,7 @@ public class Bubble : MonoBehaviour
 		if (isChecked == true)
 			return;
 		if (bubbleColor != theColor)
-		{
 			return;
-		}
 		isChecked = true;
 		int topleftNeighborRow = row;
 		int topleftNeighborColumn = column - 1;
@@ -96,7 +94,6 @@ public class Bubble : MonoBehaviour
 				}
 			}
 		}
-
 		int leftNeighborRow = row - 1;
 		int leftNeighborColumn = column;
 		if(leftNeighborRow >= 0)
@@ -110,7 +107,6 @@ public class Bubble : MonoBehaviour
 				}
 			}
 		}
-
 		int rightNeighborRow = row + 1;
 		int rightNeighborColumn = column;
 		if (rightNeighborRow < GameManager.MAX_ROW) 
@@ -124,7 +120,6 @@ public class Bubble : MonoBehaviour
 				}
 			}
 		}
-
 		int bottomleftNeighborRow = row;
 		int bottomleftNeighborColumn = column + 1;
 		if (bottomleftNeighborColumn % 2 != 0) 
@@ -209,7 +204,7 @@ public class Bubble : MonoBehaviour
 						
 				}
 				gameManager.bubbles[row][column] = this;
-				Vector2 hexpos = hexGrid.HexOffset(row ,column);
+				Vector2 hexpos = hexGrid.HexOffset(row, column);
 				Vector3 pos = new Vector3(hexpos.x, hexpos.y, 0);
 				transform.position = pos;
 				direction = Vector3.zero;
@@ -217,9 +212,9 @@ public class Bubble : MonoBehaviour
 				mySnapColliders.SetActive(true);
 				name = row + "-" + column;
 				transform.parent = gameManager.transform;
-				StartCoroutine( gameManager.ValidateNeighbors(bubbleColor,row ,column));
-						if(BubbleLandedEvent != null) 
-							BubbleLandedEvent(bubbleColor);
+				StartCoroutine( gameManager.ValidateNeighbors(bubbleColor, row, column));
+				if(BubbleLandedEvent != null) 
+					BubbleLandedEvent(bubbleColor);
 			} 
 			isMoving = false;
 		}
