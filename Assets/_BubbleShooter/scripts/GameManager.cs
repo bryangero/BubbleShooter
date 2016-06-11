@@ -45,6 +45,143 @@ public class GameManager : MonoBehaviour
 		bubbleCount = 0;
 	}
 
+	private IEnumerator ValidateInOrder(Color theColor, int row, int column) {
+			int topleftNeighborRow = row;
+			int topleftNeighborColumn = column - 1;
+			if (topleftNeighborColumn % 2 != 0) 
+				topleftNeighborRow--;
+			if (topleftNeighborColumn >= 0 && topleftNeighborRow  >= 0) 
+			{
+				if (bubbles[topleftNeighborRow][topleftNeighborColumn] != null) 
+				{
+					if (bubbles[topleftNeighborRow][topleftNeighborColumn].isChecked == false &&
+						bubbles[topleftNeighborRow][topleftNeighborColumn].bubbleColor == theColor) 
+					{
+						bubbles[topleftNeighborRow][topleftNeighborColumn].ValidateNeighbors(theColor);
+						PopBubbleEvent += bubbles[topleftNeighborRow][topleftNeighborColumn].Pop;
+					}
+				}
+			}
+			int topRightNeighborRow = row;
+			int topRightNeighborColumn = column - 1;
+			if (topRightNeighborColumn % 2 == 0) 
+				topRightNeighborRow++;
+			if (topRightNeighborRow < GameManager.MAX_ROW && topRightNeighborColumn >= 0) 
+			{
+				if (bubbles[topRightNeighborRow][topRightNeighborColumn] != null) 
+				{
+					if (bubbles[topRightNeighborRow][topRightNeighborColumn].isChecked == false &&
+						bubbles[topRightNeighborRow][topRightNeighborColumn].bubbleColor == theColor) 
+					{
+						bubbles[topRightNeighborRow][topRightNeighborColumn].ValidateNeighbors(theColor);
+						PopBubbleEvent += bubbles[topRightNeighborRow][topRightNeighborColumn].Pop;
+					}
+				}
+			}
 
+			int leftNeighborRow = row - 1;
+			int leftNeighborColumn = column;
+			if(leftNeighborRow >= 0)
+			{
+				if (bubbles[leftNeighborRow][leftNeighborColumn] != null) 
+				{
+					if (bubbles[leftNeighborRow][leftNeighborColumn].isChecked == false &&
+						bubbles[leftNeighborRow][leftNeighborColumn].bubbleColor == theColor) 
+					{
+						bubbles[leftNeighborRow][leftNeighborColumn].ValidateNeighbors(theColor);
+						PopBubbleEvent += bubbles[leftNeighborRow][leftNeighborColumn].Pop;
+					}
+				}
+			}
+
+			int rightNeighborRow = row + 1;
+			int rightNeighborColumn = column;
+			if (rightNeighborRow < GameManager.MAX_ROW) 
+			{
+				if (bubbles[rightNeighborRow][rightNeighborColumn] != null)
+				{
+					if (bubbles[rightNeighborRow][rightNeighborColumn].isChecked == false &&
+						bubbles[rightNeighborRow][rightNeighborColumn].bubbleColor == theColor) 
+					{
+						bubbles[rightNeighborRow][rightNeighborColumn].ValidateNeighbors(theColor);
+						PopBubbleEvent += bubbles[rightNeighborRow][rightNeighborColumn].Pop;
+					}
+				}
+			}
+
+			int bottomleftNeighborRow = row;
+			int bottomleftNeighborColumn = column + 1;
+			if (bottomleftNeighborColumn % 2 != 0) 
+				bottomleftNeighborRow--;
+			if (bottomleftNeighborColumn >= 0 && bottomleftNeighborRow >= 0) 
+			{
+				if (bubbles[bottomleftNeighborRow][bottomleftNeighborColumn] != null) 
+				{
+					if (bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].isChecked == false &&
+						bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].bubbleColor == theColor) 
+					{
+						bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].ValidateNeighbors (theColor);
+						PopBubbleEvent += bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].Pop;
+					}
+				}
+			}
+			int bottomRightNeighborRow = row;
+			int bottomRightNeighborColumn = column + 1;
+			if (bottomRightNeighborColumn % 2 == 0)
+				bottomRightNeighborRow++;
+			if(bottomRightNeighborRow < GameManager.MAX_ROW)
+			{
+				if (bubbles[bottomRightNeighborRow][bottomRightNeighborColumn] != null) 
+				{
+					if (bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].isChecked == false &&
+						bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].bubbleColor == theColor) 
+					{
+						bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].ValidateNeighbors(theColor);
+						PopBubbleEvent += bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].Pop;
+					}
+				}
+			}
+		yield return null;
+	}
 		
+	public IEnumerator ValidateNeighbors(Color theColor, int rowStart, int colStart) 
+	{
+		for(int row = 0; row < MAX_ROW; row++) {
+			for (int column = 0; column < MAX_COLUMN; column++) {
+				if (bubbles [row] [column] != null && row == rowStart && column == colStart) {
+					yield return StartCoroutine(ValidateInOrder(theColor,rowStart,colStart));
+				}
+			}
+		}
+		Reset ();
+	}
+
+	public void Test(int row, int column, Color theColor) {
+		if (bubbles[row][column] != null) 
+		{
+			if (bubbles[row][column].isChecked == false &&
+				bubbles[row][column].bubbleColor == theColor) 
+			{
+				bubbles[row][column].isChecked = true;
+				bubbles[row][column].Pop(Color.white);
+			}
+		}
+	}
+
+
+	public void Reset() {
+		for (int row = 0; row < bubbles.Length; row++) {
+			for (int column = 0; column < bubbles [row].Length; column++) {
+				if (bubbles [row] [column] == null) {
+					break;
+				} else {
+					bubbles[row][column].isChecked = false;
+				}
+			}
+		}
+		CallPopBubbleEvent (Color.white);
+	}
+
+
+
 }

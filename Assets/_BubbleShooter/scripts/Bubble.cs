@@ -56,11 +56,13 @@ public class Bubble : MonoBehaviour
 		gameObject.GetComponent<SpriteRenderer>().color = bubbleColor;
 		this.bubbleColor = bubbleColor;
 //		gameManager.UnsubscribeToPopBubbleEvent(Pop);
+//		gameManager.bubbles[row][column] = null;
 		Destroy(gameObject);
 	}
 
 	public void ValidateNeighbors(Color theColor) 
 	{
+//		Debug.Log ("VALIDATE");
 		if (isChecked == true)
 			return;
 		if (bubbleColor != theColor)
@@ -69,7 +71,6 @@ public class Bubble : MonoBehaviour
 			Debug.Log("IM NOT THE SAME");
 			return;
 		}
-		bool isSameColor = true;
 		isChecked = true;
 		int topleftNeighborRow = row;
 		int topleftNeighborColumn = column - 1;
@@ -81,9 +82,9 @@ public class Bubble : MonoBehaviour
 			{
 				if (gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].bubbleColor == theColor) 
 				{
-					isSameColor = true;
 					gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].Pop(Color.white);
+					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].Pop);
+//					gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].Pop(Color.white);
 				}
 			}
 		}
@@ -97,9 +98,10 @@ public class Bubble : MonoBehaviour
 			{
 				if (gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].bubbleColor == theColor) 
 				{
-					isSameColor = true;
+					
 					gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].Pop(Color.white);
+					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].Pop);
+//					gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].Pop(Color.white);
 				}
 			}
 		}
@@ -112,9 +114,10 @@ public class Bubble : MonoBehaviour
 			{
 				if (gameManager.bubbles[leftNeighborRow][leftNeighborColumn].bubbleColor == theColor) 
 				{
-					isSameColor = true;
+					
 					gameManager.bubbles[leftNeighborRow][leftNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.bubbles[leftNeighborRow][leftNeighborColumn].Pop(Color.white);
+					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[leftNeighborRow][leftNeighborColumn].Pop);
+//					gameManager.bubbles[leftNeighborRow][leftNeighborColumn].Pop(Color.white);
 				}
 			}
 		}
@@ -127,9 +130,10 @@ public class Bubble : MonoBehaviour
 			{
 				if (gameManager.bubbles[rightNeighborRow][rightNeighborColumn].bubbleColor == theColor) 
 				{
-					isSameColor = true;
+					
 					gameManager.bubbles[rightNeighborRow][rightNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.bubbles[rightNeighborRow][rightNeighborColumn].Pop(Color.white);
+					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[rightNeighborRow][rightNeighborColumn].Pop);
+//					gameManager.bubbles[rightNeighborRow][rightNeighborColumn].Pop(Color.white);
 				}
 			}
 		}
@@ -144,9 +148,10 @@ public class Bubble : MonoBehaviour
 			{
 				if (gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].bubbleColor == theColor) 
 				{
-					isSameColor = true;
+					
 					gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].Pop(Color.white);
+					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].Pop);
+//					gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].Pop(Color.white);
 				}
 			}
 		}
@@ -160,14 +165,13 @@ public class Bubble : MonoBehaviour
 			{
 				if (gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].bubbleColor == theColor) 
 				{
-					isSameColor = true;
+					
 					gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].Pop(Color.white);
+					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].Pop);
+//					gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].Pop(Color.white);
 				}
 			}
 		}
-		if (isSameColor) 
-		{
 //			GameManager.bubbleCount++;
 //			Debug.Log (GameManager.bubbleCount);
 //			gameManager.SubscribeToPopBubbleEvent(Pop);
@@ -175,10 +179,9 @@ public class Bubble : MonoBehaviour
 //				Pop (Color.white);
 //				gameManager.CallPopBubbleEvent (theColor);
 //			} 
-		}
 
-		if(BubbleLandedEvent != null) 
-			BubbleLandedEvent(bubbleColor);
+//		if(BubbleLandedEvent != null) 
+//			BubbleLandedEvent(bubbleColor);
 	}
 		
 	private void OnTriggerEnter2D(Collider2D otherCollider) 
@@ -241,7 +244,9 @@ public class Bubble : MonoBehaviour
 				mySnapColliders.SetActive(true);
 				name = row + "-" + column;
 				transform.parent = gameManager.transform;
-				ValidateNeighbors(bubbleColor);
+				StartCoroutine( gameManager.ValidateNeighbors(bubbleColor,row ,column));
+						if(BubbleLandedEvent != null) 
+							BubbleLandedEvent(bubbleColor);
 			} 
 			isMoving = false;
 		}
