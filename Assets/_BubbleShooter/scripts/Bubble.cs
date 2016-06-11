@@ -80,7 +80,6 @@ public class Bubble : MonoBehaviour
 				if (gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].bubbleColor == theColor) 
 				{
 					gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].ValidateNeighbors(theColor);
-					Debug.Log (gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].name);
 					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].Pop,
 														  gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].CancelPop);
 				}
@@ -97,7 +96,6 @@ public class Bubble : MonoBehaviour
 				if (gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].bubbleColor == theColor) 
 				{
 					gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].ValidateNeighbors(theColor);
-					Debug.Log (gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].name);
 					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].Pop,
 														  gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].CancelPop);
 				}
@@ -112,7 +110,6 @@ public class Bubble : MonoBehaviour
 				if (gameManager.bubbles[leftNeighborRow][leftNeighborColumn].bubbleColor == theColor) 
 				{
 					gameManager.bubbles[leftNeighborRow][leftNeighborColumn].ValidateNeighbors(theColor);
-					Debug.Log (gameManager.bubbles[leftNeighborRow][leftNeighborColumn].name);
 					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[leftNeighborRow][leftNeighborColumn].Pop,
 														  gameManager.bubbles[leftNeighborRow][leftNeighborColumn].CancelPop);
 				}
@@ -127,7 +124,6 @@ public class Bubble : MonoBehaviour
 				if (gameManager.bubbles[rightNeighborRow][rightNeighborColumn].bubbleColor == theColor) 
 				{
 					gameManager.bubbles[rightNeighborRow][rightNeighborColumn].ValidateNeighbors(theColor);
-					Debug.Log (gameManager.bubbles[rightNeighborRow][rightNeighborColumn].name);
 					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[rightNeighborRow][rightNeighborColumn].Pop, 
 														  gameManager.bubbles[rightNeighborRow][rightNeighborColumn].CancelPop);
 				}
@@ -144,7 +140,6 @@ public class Bubble : MonoBehaviour
 				if (gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].bubbleColor == theColor) 
 				{
 					gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].ValidateNeighbors(theColor);
-					Debug.Log (gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].name);
 					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].Pop, 
 														  gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].CancelPop);
 				}
@@ -161,7 +156,6 @@ public class Bubble : MonoBehaviour
 				if (gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].bubbleColor == theColor) 
 				{
 					gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].ValidateNeighbors(theColor);
-					Debug.Log (gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].name);
 					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].Pop,
 														  gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].CancelPop);
 				}

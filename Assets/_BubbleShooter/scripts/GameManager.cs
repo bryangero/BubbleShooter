@@ -50,7 +50,6 @@ public class GameManager : MonoBehaviour
 		} else if (CancelPopBubbleEvent != null) {
 			CancelPopBubbleEvent();
 		}
-		Debug.Log (PopBubbleEvent.GetInvocationList().Length);
 		PopBubbleEvent = null;
 		CancelPopBubbleEvent = null;
 		bubbleCount = 0;
@@ -60,13 +59,9 @@ public class GameManager : MonoBehaviour
 	public IEnumerator ValidateNeighbors(Color theColor, int rowStart, int colStart) 
 	{
 		for(int row = 0; row < MAX_ROW; row++)
-		{
 			for (int column = 0; column < MAX_COLUMN; column++) 
-			{
 				if (bubbles [row] [column] != null && row == rowStart && column == colStart)
 					yield return StartCoroutine(ValidateInOrder(theColor,rowStart,colStart));
-			}
-		}
 		CallPopBubbleEvent();
 	}
 		
