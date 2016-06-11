@@ -146,42 +146,17 @@ public class GameManager : MonoBehaviour
 		
 	public IEnumerator ValidateNeighbors(Color theColor, int rowStart, int colStart) 
 	{
-		for(int row = 0; row < MAX_ROW; row++) {
-			for (int column = 0; column < MAX_COLUMN; column++) {
-				if (bubbles [row] [column] != null && row == rowStart && column == colStart) {
-					yield return StartCoroutine(ValidateInOrder(theColor,rowStart,colStart));
-				}
-			}
-		}
-		Reset ();
-	}
-
-	public void Test(int row, int column, Color theColor) {
-		if (bubbles[row][column] != null) 
+		for(int row = 0; row < MAX_ROW; row++)
 		{
-			if (bubbles[row][column].isChecked == false &&
-				bubbles[row][column].bubbleColor == theColor) 
+			for (int column = 0; column < MAX_COLUMN; column++) 
 			{
-				bubbles[row][column].isChecked = true;
-				bubbles[row][column].Pop(Color.white);
+				if (bubbles [row] [column] != null && row == rowStart && column == colStart)
+					yield return StartCoroutine(ValidateInOrder(theColor,rowStart,colStart));
 			}
 		}
+		CallPopBubbleEvent(Color.white);
 	}
-
-
-	public void Reset() {
-		for (int row = 0; row < bubbles.Length; row++) {
-			for (int column = 0; column < bubbles [row].Length; column++) {
-				if (bubbles [row] [column] == null) {
-					break;
-				} else {
-					bubbles[row][column].isChecked = false;
-				}
-			}
-		}
-		CallPopBubbleEvent (Color.white);
-	}
-
+		
 
 
 }
