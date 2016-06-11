@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Score : MonoBehaviour {
+public class ScoreDisplay : MonoBehaviour {
 
 	public TextMesh scoreText;
 

@@ -5,20 +5,29 @@ using System.Linq;
 public class GameManager : MonoBehaviour 
 {
 	public int score = 0;
+	public Bubble[][] bubbles;
+	public const int MAX_ROW = 11;
+	public const int MAX_COLUMN = 13;
 
 	public delegate void GameOverDG();
 	public event GameOverDG GameOverEvent;
 
-	public Bubble[][] bubbles;
-
-	public const int MAX_ROW = 11;
-	public const int MAX_COLUMN = 13;
-
-	private void Awake() 
+	public void SubscribeToGameOverEvent(GameOverDG gameOverDG)
 	{
-		bubbles = new Bubble[MAX_ROW][];
-		for (int i = 0; i < bubbles.Length; i++) 
-			bubbles[i] = new Bubble[MAX_COLUMN];
+		if (GameOverEvent == null || !GameOverEvent.GetInvocationList().Contains(gameOverDG))
+			GameOverEvent += gameOverDG;
+	}
+
+	public void UnsubscribeToGameOverEvent(GameOverDG gameOverDG) 
+	{
+		if (GameOverEvent.GetInvocationList().Contains(gameOverDG)) 
+			GameOverEvent -= gameOverDG;
+	}
+
+	public void CallGameOverEvent() 
+	{
+		if (GameOverEvent != null) 
+			GameOverEvent();
 	}
 
 	public delegate void PopBubbleDG(int score);
@@ -57,17 +66,23 @@ public class GameManager : MonoBehaviour
 		CancelPopBubbleEvent = null;
 	}
 
-		
-	public IEnumerator ValidateNeighbors(Color theColor, int rowStart, int colStart) 
+	private void Awake() 
+	{
+		bubbles = new Bubble[MAX_ROW][];
+		for (int i = 0; i < bubbles.Length; i++) 
+			bubbles[i] = new Bubble[MAX_COLUMN];
+	}
+
+	public IEnumerator RunThroughBubbleMatrix(Color theColor, int rowStart, int colStart) 
 	{
 		for(int row = 0; row < MAX_ROW; row++)
 			for (int column = 0; column < MAX_COLUMN; column++) 
-				if (bubbles [row] [column] != null && row == rowStart && column == colStart)
-					yield return StartCoroutine(ValidateInOrder(theColor,rowStart,colStart));
+				if (bubbles[row][column] != null && row == rowStart && column == colStart)
+					yield return StartCoroutine(ValidateNeighbors(theColor, rowStart, colStart));
 		CallPopBubbleEvent();
 	}
 		
-	private IEnumerator ValidateInOrder(Color theColor, int row, int column) 
+	private IEnumerator ValidateNeighbors(Color theColor, int row, int column) 
 	{
 		bubbles[row][column].ValidateNeighbors(theColor);
 		yield return null;

@@ -10,10 +10,12 @@ public class Shooter : MonoBehaviour
 	[SerializeField] private GameObject direction;
 	private Bubble bubble;
 	private bool isBubbleShot;
+	private bool isGameOver;
 
 	private void Start() 
 	{
 		gameManager = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
+		gameManager.SubscribeToGameOverEvent(OnGameOver);
 		ReloadBubble(Color.white);	
 	}
 
@@ -24,9 +26,16 @@ public class Shooter : MonoBehaviour
 		bubble.name = numberOfShots.ToString();
 		numberOfShots++;
 	}
+
+	public void OnGameOver()
+	{
+		isGameOver = true;
+	}
 		
 	private void Update() 
 	{
+		if (isGameOver)
+			return;
 		if (isBubbleShot)
 			return;
 		Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);

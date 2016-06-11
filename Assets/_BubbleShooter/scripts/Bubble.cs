@@ -8,7 +8,7 @@ public class Bubble : MonoBehaviour
 	public event BubbleLandedDG BubbleLandedEvent;
 	public HexGrid hexGrid;
 	[SerializeField] private GameManager gameManager;
-	[SerializeField] private Score score;
+	[SerializeField] private ScoreDisplay scoreDisplay;
 	[SerializeField] private float speed;
 	public GameObject mySnapColliders;
 	public Collider2D myCollider;
@@ -53,10 +53,9 @@ public class Bubble : MonoBehaviour
 
 	public void Pop(int score)
 	{
-		this.score.Animate(score);
+		scoreDisplay.Animate(score);
 		gameManager.bubbles[row][column] = null;
 		gameObject.GetComponent<SpriteRenderer>().enabled = false;
-//		Destroy(gameObject);
 	}
 
 	public void CancelPop() 
@@ -135,7 +134,7 @@ public class Bubble : MonoBehaviour
 		int bottomleftNeighborColumn = column + 1;
 		if (bottomleftNeighborColumn % 2 != 0) 
 			bottomleftNeighborRow--;
-		if (bottomleftNeighborColumn >= 0 && bottomleftNeighborRow >= 0) 
+		if (bottomleftNeighborColumn < GameManager.MAX_COLUMN && bottomleftNeighborRow < GameManager.MAX_ROW) 
 		{
 			if (gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn] != null) 
 			{
@@ -151,7 +150,7 @@ public class Bubble : MonoBehaviour
 		int bottomRightNeighborColumn = column + 1;
 		if (bottomRightNeighborColumn % 2 == 0)
 			bottomRightNeighborRow++;
-		if(bottomRightNeighborRow < GameManager.MAX_ROW)
+		if(bottomRightNeighborRow < GameManager.MAX_ROW && bottomRightNeighborColumn < GameManager.MAX_COLUMN)
 		{
 			if (gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn] != null) 
 			{
@@ -215,16 +214,22 @@ public class Bubble : MonoBehaviour
 					else
 						column++;
 				}
-				gameManager.bubbles[row][column] = this;
-				Vector2 hexpos = hexGrid.HexOffset(row, column);
-				Vector3 pos = new Vector3(hexpos.x, hexpos.y, 0);
-				transform.position = pos;
+				Debug.Log (column + " " + GameManager.MAX_COLUMN);
+				if (column < GameManager.MAX_COLUMN)
+				{
+					gameManager.bubbles[row][column] = this;
+					StartCoroutine(gameManager.RunThroughBubbleMatrix(bubbleColor, row, column));
+					Vector2 hexpos = hexGrid.HexOffset(row, column);
+					Vector3 pos = new Vector3(hexpos.x, hexpos.y, 0);
+					transform.position = pos;
+				}
+				else  
+					gameManager.CallGameOverEvent();
 				direction = Vector3.zero;
 				myCollider.enabled = false;
 				mySnapColliders.SetActive(true);
 				name = row + "-" + column;
 				transform.parent = gameManager.transform;
-				StartCoroutine(gameManager.ValidateNeighbors(bubbleColor, row, column));
 				if(BubbleLandedEvent != null) 
 					BubbleLandedEvent(bubbleColor);
 			} 
