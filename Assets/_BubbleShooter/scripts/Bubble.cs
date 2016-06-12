@@ -37,18 +37,18 @@ public class Bubble : MonoBehaviour
 		gameObject.GetComponent<SpriteRenderer>().color = bubbleColor;
 		direction = Vector3.zero;
 		myCollider.enabled = false;
-		mySnapColliders.SetActive (true);
+		mySnapColliders.SetActive(true);
 	}
 
 	private void Update() 
 	{
 		if (direction != Vector3.zero) 
 		{
-			mySnapColliders.SetActive (false);
+			mySnapColliders.SetActive(false);
 			isMoving = true;
 			myCollider.enabled = true;
 		}
-		transform.Translate(direction * (Time.deltaTime*speed));
+		transform.Translate(direction *(Time.deltaTime*speed));
 	}
 
 	public void Pop(int score)
@@ -63,103 +63,58 @@ public class Bubble : MonoBehaviour
 		isChecked = false;
 	}
 
-	public void ValidateNeighbors(Color theColor) 
+	public void ValidateNeighbors(Color colorHit) 
 	{
 		if (isChecked == true)
 			return;
-		if (bubbleColor != theColor)
+		if (bubbleColor != colorHit)
 			return;
 		isChecked = true;
 		int topleftNeighborRow = row;
 		int topleftNeighborColumn = column - 1;
 		if (topleftNeighborColumn % 2 != 0) 
 			topleftNeighborRow--;
-		if (topleftNeighborColumn >= 0 && topleftNeighborRow  >= 0) 
-		{
-			if (gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn] != null) 
-			{
-				if (gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].bubbleColor == theColor) 
-				{
-					gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].Pop,
-														  gameManager.bubbles[topleftNeighborRow][topleftNeighborColumn].CancelPop);
-				}
-			}
-		}
+		if (topleftNeighborRow  >= 0 && topleftNeighborColumn >= 0) 
+			MakeNeighborValidate(topleftNeighborRow, topleftNeighborColumn, colorHit);
 		int topRightNeighborRow = row;
 		int topRightNeighborColumn = column - 1;
 		if (topRightNeighborColumn % 2 == 0) 
 			topRightNeighborRow++;
 		if (topRightNeighborRow < GameManager.MAX_ROW && topRightNeighborColumn >= 0) 
-		{
-			if (gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn] != null) 
-			{
-				if (gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].bubbleColor == theColor) 
-				{
-					gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].Pop,
-														  gameManager.bubbles[topRightNeighborRow][topRightNeighborColumn].CancelPop);
-				}
-			}
-		}
+			MakeNeighborValidate(topRightNeighborRow, topRightNeighborColumn, colorHit);
 		int leftNeighborRow = row - 1;
 		int leftNeighborColumn = column;
-		if(leftNeighborRow >= 0)
-		{
-			if (gameManager.bubbles[leftNeighborRow][leftNeighborColumn] != null) 
-			{
-				if (gameManager.bubbles[leftNeighborRow][leftNeighborColumn].bubbleColor == theColor) 
-				{
-					gameManager.bubbles[leftNeighborRow][leftNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[leftNeighborRow][leftNeighborColumn].Pop,
-														  gameManager.bubbles[leftNeighborRow][leftNeighborColumn].CancelPop);
-				}
-			}
-		}
+		if (leftNeighborRow >= 0)
+			MakeNeighborValidate(leftNeighborRow, leftNeighborColumn, colorHit);
 		int rightNeighborRow = row + 1;
 		int rightNeighborColumn = column;
-		if (rightNeighborRow < GameManager.MAX_ROW) 
-		{
-			if (gameManager.bubbles[rightNeighborRow][rightNeighborColumn] != null)
-			{
-				if (gameManager.bubbles[rightNeighborRow][rightNeighborColumn].bubbleColor == theColor) 
-				{
-					gameManager.bubbles[rightNeighborRow][rightNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[rightNeighborRow][rightNeighborColumn].Pop, 
-														  gameManager.bubbles[rightNeighborRow][rightNeighborColumn].CancelPop);
-				}
-			}
-		}
+		if (rightNeighborRow < GameManager.MAX_ROW)
+			MakeNeighborValidate(rightNeighborRow, rightNeighborColumn, colorHit);
 		int bottomleftNeighborRow = row;
 		int bottomleftNeighborColumn = column + 1;
 		if (bottomleftNeighborColumn % 2 != 0) 
 			bottomleftNeighborRow--;
-		if (bottomleftNeighborColumn < GameManager.MAX_COLUMN && bottomleftNeighborRow < GameManager.MAX_ROW) 
-		{
-			if (gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn] != null) 
-			{
-				if (gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].bubbleColor == theColor) 
-				{
-					gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].Pop, 
-														  gameManager.bubbles[bottomleftNeighborRow][bottomleftNeighborColumn].CancelPop);
-				}
-			}
-		}
+		if (bottomleftNeighborRow >= 0 && 
+			bottomleftNeighborColumn < GameManager.MAX_COLUMN) 
+			MakeNeighborValidate(bottomleftNeighborRow, bottomleftNeighborColumn, colorHit);
 		int bottomRightNeighborRow = row;
 		int bottomRightNeighborColumn = column + 1;
 		if (bottomRightNeighborColumn % 2 == 0)
 			bottomRightNeighborRow++;
-		if(bottomRightNeighborRow < GameManager.MAX_ROW && bottomRightNeighborColumn < GameManager.MAX_COLUMN)
+		if (bottomRightNeighborRow < GameManager.MAX_ROW && 
+			bottomRightNeighborColumn < GameManager.MAX_COLUMN)
+			MakeNeighborValidate(bottomRightNeighborRow, bottomRightNeighborColumn, colorHit);
+	}
+
+	private void MakeNeighborValidate(int row, int column, Color colorHit) 
+	{
+		if (gameManager.bubbles[row][column] != null)
 		{
-			if (gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn] != null) 
+			if (gameManager.bubbles[row][column].bubbleColor == colorHit) 
 			{
-				if (gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].bubbleColor == theColor) 
-				{
-					gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].ValidateNeighbors(theColor);
-					gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].Pop,
-														  gameManager.bubbles[bottomRightNeighborRow][bottomRightNeighborColumn].CancelPop);
-				}
+				gameManager.bubbles[row][column].ValidateNeighbors(colorHit);
+				gameManager.SubscribeToPopBubbleEvent(gameManager.bubbles[row][column].Pop,
+													  gameManager.bubbles[row][column].CancelPop);
 			}
 		}
 	}
@@ -214,7 +169,6 @@ public class Bubble : MonoBehaviour
 					else
 						column++;
 				}
-				Debug.Log (column + " " + GameManager.MAX_COLUMN);
 				if (column < GameManager.MAX_COLUMN)
 				{
 					gameManager.bubbles[row][column] = this;
@@ -230,7 +184,7 @@ public class Bubble : MonoBehaviour
 				mySnapColliders.SetActive(true);
 				name = row + "-" + column;
 				transform.parent = gameManager.transform;
-				if(BubbleLandedEvent != null) 
+				if (BubbleLandedEvent != null) 
 					BubbleLandedEvent(bubbleColor);
 			} 
 			isMoving = false;
