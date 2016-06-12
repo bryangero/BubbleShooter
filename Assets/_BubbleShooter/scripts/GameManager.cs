@@ -63,7 +63,6 @@ public class GameManager : MonoBehaviour
 	{
 		if (PopBubbleEvent == null || !PopBubbleEvent.GetInvocationList().Contains(popBubbleDG))
 			PopBubbleEvent += popBubbleDG;
-		
 		if (CancelPopBubbleEvent == null || !CancelPopBubbleEvent.GetInvocationList().Contains(popBubbleDG))
 			CancelPopBubbleEvent += cancelPopBubbleDG;
 	}
@@ -86,12 +85,10 @@ public class GameManager : MonoBehaviour
 		}
 		else if (CancelPopBubbleEvent != null) 
 			CancelPopBubbleEvent();
-		
 		PopBubbleEvent = null;
 		CancelPopBubbleEvent = null;
 		CheckGameFinished();
 	}
-	
 
 	private void Awake() 
 	{
@@ -105,7 +102,6 @@ public class GameManager : MonoBehaviour
 	{
 		if (isEndGame == false)
 			return;
-
 		if(Input.GetMouseButtonUp(0))
 			SceneManager.LoadScene("Main");
 	}
@@ -115,34 +111,28 @@ public class GameManager : MonoBehaviour
 		isEndGame = true;
 	}
 
-	public IEnumerator RunThroughBubbleMatrix(Color theColor, int rowStart, int colStart) 
+	public IEnumerator RunThroughBubbleMatrix(int rowStart, int colStart, Color colorHit) 
 	{
 		for(int row = 0; row < MAX_ROW; row++)
 			for (int column = 0; column < MAX_COLUMN; column++) 
 				if (bubbles[row][column] != null && row == rowStart && column == colStart)
-					yield return StartCoroutine(ValidateNeighbors(theColor, rowStart, colStart));
+					yield return StartCoroutine(ValidateNeighbors(rowStart, colStart, colorHit));
 		CallPopBubbleEvent();
 	}
 
 	private void CheckGameFinished()
 	{
 		int nullCtr = 0;
-		for (int row = 0; row < MAX_ROW; row++) {
-			if (bubbles [row] [0] == null) {
+		for (int row = 0; row < MAX_ROW; row++)
+			if (bubbles [row] [0] == null) 
 				nullCtr++;
-			}
-		}
-		Debug.Log (nullCtr + " "+MAX_ROW);
 		if (nullCtr >= MAX_ROW)
 			CallEndGameEvent(true);
-
 	}
 		
-	private IEnumerator ValidateNeighbors(Color theColor, int row, int column) 
+	private IEnumerator ValidateNeighbors(int row, int column, Color colorHit) 
 	{
-		bubbles[row][column].ValidateNeighbors(theColor);
+		bubbles[row][column].ValidateNeighbors(colorHit);
 		yield return null;
 	}
-
-
 }

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class GameUI : MonoBehaviour {
 
+public class GameUI : MonoBehaviour 
+{
 	[SerializeField] private GameManager gameManager;
 	[SerializeField] private Text endGameLabel;
 	[SerializeField] private Text scoreLabel;
@@ -26,8 +27,5 @@ public class GameUI : MonoBehaviour {
 			endGameLabel.text = "You Win!";
 		else
 			endGameLabel.text = "Game Over!";
-
 	}
-
-
 }

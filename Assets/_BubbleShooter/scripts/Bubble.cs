@@ -3,21 +3,20 @@ using System.Collections;
 
 public class Bubble : MonoBehaviour 
 {
-	
 	public delegate void BubbleLandedDG(Color color);
 	public event BubbleLandedDG BubbleLandedEvent;
-	public HexGrid hexGrid;
-	[SerializeField] private GameManager gameManager;
 	[SerializeField] private ScoreDisplay scoreDisplay;
 	[SerializeField] private float speed;
-	public GameObject mySnapColliders;
-	public Collider2D myCollider;
+	[SerializeField] private GameObject mySnapColliders;
+	[SerializeField] private Collider2D myCollider;
 	public Color bubbleColor;
-	public bool isMoving;
 	public Vector3 direction;
 	public int row;
 	public int column;
 	public bool isChecked;
+	private GameManager gameManager;
+	private HexGrid hexGrid;
+	private bool isMoving;
 
 	private void Start() 
 	{
@@ -114,13 +113,10 @@ public class Bubble : MonoBehaviour
 		
 	private void OnTriggerEnter2D(Collider2D otherCollider) 
 	{
-		Border border = otherCollider.GetComponent<Border>() as Border;
 		if (isMoving == true) 
 		{
-			if (border != null) 
-				if (border.name != "TopBorder")
-					return;
-			Bubble otherBubble = otherCollider.transform.parent.transform.parent.GetComponent<Bubble>() as Bubble;
+			Bubble otherBubble = otherCollider.transform.parent.
+											   transform.parent.GetComponent<Bubble>() as Bubble;
 			if (otherBubble != null) 
 			{
 				if (otherCollider.name == "BottomSnapLeft") 
@@ -162,7 +158,7 @@ public class Bubble : MonoBehaviour
 				if (column < GameManager.MAX_COLUMN)
 				{
 					gameManager.bubbles[row][column] = this;
-					StartCoroutine(gameManager.RunThroughBubbleMatrix(bubbleColor, row, column));
+					StartCoroutine(gameManager.RunThroughBubbleMatrix(row, column, bubbleColor));
 					Vector2 hexpos = hexGrid.HexOffset(row, column);
 					Vector3 pos = new Vector3(hexpos.x, hexpos.y, 0);
 					transform.position = pos;
@@ -180,5 +176,4 @@ public class Bubble : MonoBehaviour
 			isMoving = false;
 		}
 	}
-		
 }

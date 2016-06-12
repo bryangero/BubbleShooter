@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Border : MonoBehaviour 
 {
-
 	[SerializeField] private Vector3 newDirection;
 
 	private void OnTriggerEnter2D(Collider2D otherCollider) 
@@ -12,5 +11,4 @@ public class Border : MonoBehaviour
 		bubble.direction = new Vector3(bubble.direction.x * newDirection.x, 
 									   bubble.direction.y * newDirection.y);
 	}
-		
 }
