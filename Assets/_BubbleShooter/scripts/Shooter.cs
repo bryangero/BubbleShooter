@@ -3,11 +3,9 @@ using System.Collections;
 
 public class Shooter : MonoBehaviour 
 {
-	private int numberOfShots;
-	private GameManager gameManager;
-	[SerializeField] private float rotationSpeed;
 	[SerializeField] private GameObject bubbleGameObject;
 	[SerializeField] private GameObject direction;
+	private GameManager gameManager;
 	private Bubble bubble;
 	private bool isBubbleShot;
 	private bool isEndGame;
@@ -23,8 +21,6 @@ public class Shooter : MonoBehaviour
 	{
 		isBubbleShot = false;
 		bubble = Instantiate(bubbleGameObject).GetComponent<Bubble>() as Bubble;
-		bubble.name = numberOfShots.ToString();
-		numberOfShots++;
 	}
 
 	public void OnEndGame(bool isWin)
@@ -39,11 +35,10 @@ public class Shooter : MonoBehaviour
 		if (isBubbleShot)
 			return;
 		Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		Quaternion rot = Quaternion.LookRotation(transform.position - mousePosition, Vector3.forward);
-		rot.x = 0;
-		rot.y = 0;
-		transform.rotation = rot;
-//		Debug.DrawLine(transform.position, transform.position + mousePosition);
+		Quaternion newRotation = Quaternion.LookRotation(transform.position - mousePosition, Vector3.forward);
+		newRotation.x = 0;
+		newRotation.y = 0;
+		transform.rotation = newRotation;
 		if(Input.GetMouseButtonUp(0))
 		{
 			if (bubble != null) 

@@ -15,13 +15,6 @@ public class Bubble : MonoBehaviour
 	public Color bubbleColor;
 	public bool isMoving;
 	public Vector3 direction;
-	public Transform topRight;
-	public Transform topLeft;
-	public Transform BottomRight;
-	public Transform BottomLeft;
-	public Transform Right;
-	public Transform Left;
-	public RaycastHit2D[] hits;
 	public int row;
 	public int column;
 	public bool isChecked;
@@ -127,10 +120,7 @@ public class Bubble : MonoBehaviour
 			if (border != null) 
 				if (border.name != "TopBorder")
 					return;
-			Clipper otherClipper = otherCollider.GetComponent<Clipper>() as Clipper;
-			Bubble otherBubble = null; 
-			if (otherClipper != null) 
-				otherBubble = otherClipper.bubble;
+			Bubble otherBubble = otherCollider.transform.parent.transform.parent.GetComponent<Bubble>() as Bubble;
 			if (otherBubble != null) 
 			{
 				if (otherCollider.name == "BottomSnapLeft") 
