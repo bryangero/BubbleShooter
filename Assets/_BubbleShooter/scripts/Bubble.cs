@@ -22,9 +22,9 @@ public class Bubble : MonoBehaviour
 	{
 		hexGrid = GameObject.FindObjectOfType(typeof(HexGrid)) as HexGrid;
 		gameManager = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
-		Color[] colors = new Color[5] { Color.red, Color.blue, Color.yellow, 
-										Color.green, Color.magenta };
-//		Color[] colors = new Color[1] { Color.red };
+//		Color[] colors = new Color[5] { Color.red, Color.blue, Color.yellow, 
+//										Color.green, Color.magenta };
+		Color[] colors = new Color[1] { Color.red };
 		bubbleColor = colors[Random.Range(0, colors.Length)];
 		gameObject.GetComponent<SpriteRenderer>().color = bubbleColor;
 		direction = Vector3.zero;
@@ -48,6 +48,7 @@ public class Bubble : MonoBehaviour
 		scoreDisplay.Animate(score);
 		gameManager.bubbles[row][column] = null;
 		gameObject.GetComponent<SpriteRenderer>().enabled = false;
+		gameObject.GetComponent<AudioSource>().PlayDelayed(Random.Range(0f, 0.2f));
 	}
 
 	public void CancelPop() 
