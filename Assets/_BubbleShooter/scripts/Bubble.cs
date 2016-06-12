@@ -62,6 +62,8 @@ public class Bubble : MonoBehaviour
 		if (bubbleColor != colorHit)
 			return;
 		isChecked = true;
+		gameManager.SubscribeToPopBubbleEvent(Pop, CancelPop);
+
 		int topleftNeighborRow = row;
 		int topleftNeighborColumn = column - 1;
 		if (topleftNeighborColumn % 2 != 0) 
