@@ -4,14 +4,13 @@ using UnityEngine.UI;
 public class GameUI : MonoBehaviour {
 
 	[SerializeField] private GameManager gameManager;
-	[SerializeField] private GameObject gameOverText;
-
+	[SerializeField] private Text endGameLabel;
 	[SerializeField] private Text scoreLabel;
 
 	private void Awake() 
 	{
 		gameManager = GameObject.FindObjectOfType<GameManager>() as GameManager;
-		gameManager.SubscribeToGameOverEvent(OnGameOver);
+		gameManager.SubscribeToEndGameEvent(OnEndGame);
 		gameManager.SubscribeToUpdateScoreEvent(OnUpdateScore);
 	}
 
@@ -20,9 +19,14 @@ public class GameUI : MonoBehaviour {
 		scoreLabel.text = score.ToString();
 	}
 		
-	public void OnGameOver() 
+	public void OnEndGame(bool isWin) 
 	{
-		gameOverText.SetActive(true);
+		endGameLabel.gameObject.SetActive(true);
+		if (isWin)
+			endGameLabel.text = "You Win!";
+		else
+			endGameLabel.text = "Game Over!";
+
 	}
 
 

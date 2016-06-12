@@ -9,14 +9,14 @@ public class GameManager : MonoBehaviour
 	public Bubble[][] bubbles;
 	public const int MAX_ROW = 11;
 	public const int MAX_COLUMN = 13;
-	private bool isGameOver = false;
+	private bool isEndGame = false;
 
 	public delegate void UpdateScoreDG(int score);
 	public event UpdateScoreDG UpdateScoreEvent;
 
 	public void SubscribeToUpdateScoreEvent(UpdateScoreDG updateScoreDG)
 	{
-		if (UpdateScoreEvent == null || !GameOverEvent.GetInvocationList().Contains(updateScoreDG))
+		if (UpdateScoreEvent == null || !EndGameEvent.GetInvocationList().Contains(updateScoreDG))
 			UpdateScoreEvent += updateScoreDG;
 	}
 
@@ -32,25 +32,25 @@ public class GameManager : MonoBehaviour
 			UpdateScoreEvent(score);
 	}
 
-	public delegate void GameOverDG();
-	public event GameOverDG GameOverEvent;
+	public delegate void EndGameDG(bool isWin);
+	public event EndGameDG EndGameEvent;
 
-	public void SubscribeToGameOverEvent(GameOverDG gameOverDG)
+	public void SubscribeToEndGameEvent(EndGameDG endGameDG)
 	{
-		if (GameOverEvent == null || !GameOverEvent.GetInvocationList().Contains(gameOverDG))
-			GameOverEvent += gameOverDG;
+		if (EndGameEvent == null || !EndGameEvent.GetInvocationList().Contains(endGameDG))
+			EndGameEvent += endGameDG;
 	}
 
-	public void UnsubscribeToGameOverEvent(GameOverDG gameOverDG) 
+	public void UnsubscribeToEndGameEvent(EndGameDG endGameDG) 
 	{
-		if (GameOverEvent.GetInvocationList().Contains(gameOverDG)) 
-			GameOverEvent -= gameOverDG;
+		if (EndGameEvent.GetInvocationList().Contains(endGameDG)) 
+			EndGameEvent -= endGameDG;
 	}
 
-	public void CallGameOverEvent() 
+	public void CallEndGameEvent(bool isWin) 
 	{
-		if (GameOverEvent != null) 
-			GameOverEvent();
+		if (EndGameEvent != null) 
+			EndGameEvent(isWin);
 	}
 
 	public delegate void PopBubbleDG(int score);
@@ -89,28 +89,30 @@ public class GameManager : MonoBehaviour
 		
 		PopBubbleEvent = null;
 		CancelPopBubbleEvent = null;
+		CheckGameFinished();
 	}
+	
 
 	private void Awake() 
 	{
 		bubbles = new Bubble[MAX_ROW][];
 		for (int i = 0; i < bubbles.Length; i++) 
 			bubbles[i] = new Bubble[MAX_COLUMN];
-		SubscribeToGameOverEvent(OnGameOver);
+		SubscribeToEndGameEvent(OnEndGame);
 	}
 
 	private void Update() 
 	{
-		if (isGameOver == false)
+		if (isEndGame == false)
 			return;
 
 		if(Input.GetMouseButtonUp(0))
 			SceneManager.LoadScene("Main");
 	}
 
-	private void OnGameOver() 
+	private void OnEndGame(bool isWin) 
 	{
-		isGameOver = true;
+		isEndGame = true;
 	}
 
 	public IEnumerator RunThroughBubbleMatrix(Color theColor, int rowStart, int colStart) 
@@ -120,6 +122,20 @@ public class GameManager : MonoBehaviour
 				if (bubbles[row][column] != null && row == rowStart && column == colStart)
 					yield return StartCoroutine(ValidateNeighbors(theColor, rowStart, colStart));
 		CallPopBubbleEvent();
+	}
+
+	private void CheckGameFinished()
+	{
+		int nullCtr = 0;
+		for (int row = 0; row < MAX_ROW; row++) {
+			if (bubbles [row] [0] == null) {
+				nullCtr++;
+			}
+		}
+		Debug.Log (nullCtr + " "+MAX_ROW);
+		if (nullCtr >= MAX_ROW)
+			CallEndGameEvent(true);
+
 	}
 		
 	private IEnumerator ValidateNeighbors(Color theColor, int row, int column) 

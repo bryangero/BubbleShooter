@@ -178,7 +178,7 @@ public class Bubble : MonoBehaviour
 					transform.position = pos;
 				}
 				else  
-					gameManager.CallGameOverEvent();
+					gameManager.CallEndGameEvent(false);
 				direction = Vector3.zero;
 				myCollider.enabled = false;
 				mySnapColliders.SetActive(true);

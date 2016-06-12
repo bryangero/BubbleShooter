@@ -10,12 +10,12 @@ public class Shooter : MonoBehaviour
 	[SerializeField] private GameObject direction;
 	private Bubble bubble;
 	private bool isBubbleShot;
-	private bool isGameOver;
+	private bool isEndGame;
 
 	private void Start() 
 	{
 		gameManager = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
-		gameManager.SubscribeToGameOverEvent(OnGameOver);
+		gameManager.SubscribeToEndGameEvent(OnEndGame);
 		ReloadBubble(Color.white);	
 	}
 
@@ -27,14 +27,14 @@ public class Shooter : MonoBehaviour
 		numberOfShots++;
 	}
 
-	public void OnGameOver()
+	public void OnEndGame(bool isWin)
 	{
-		isGameOver = true;
+		isEndGame = true;
 	}
 		
 	private void Update() 
 	{
-		if (isGameOver)
+		if (isEndGame == true)
 			return;
 		if (isBubbleShot)
 			return;
